@@ -8,6 +8,8 @@ import greenfoot.*;
  */
 public class MyWorld extends World
 {
+    private long lastFrameTimeMS;
+    private double timeStepDuration;
 
     /**
      * Constructor for objects of class MyWorld.
@@ -15,12 +17,30 @@ public class MyWorld extends World
     public MyWorld()
     {
         super(800, 600, 1);
+        lastFrameTimeMS = System.currentTimeMillis();
+        timeStepDuration = 1.0 / 60;
         prepare();
     }
 
     /**
-     * Prepare the world for the start of the program.
-     * That is: create the initial objects and add them to the world.
+     * main
+     */
+    public void act()
+    {
+        timeStepDuration = (System.currentTimeMillis() - lastFrameTimeMS) / 1000.0;
+        lastFrameTimeMS = System.currentTimeMillis();
+    }
+
+    /**
+     * 
+     */
+    public double getTimeStepDuration()
+    {
+        return timeStepDuration;
+    }
+
+    /**
+     * Prepare the world for the start of the program. That is: create the initial objects and add them to the world.
      */
     private void prepare()
     {

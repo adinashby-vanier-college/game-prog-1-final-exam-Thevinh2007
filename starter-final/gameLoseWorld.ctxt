@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=gameLoseWorld
+comment0.text=\r\n\ \r\n
+comment1.params=
+comment1.target=gameLoseWorld()
+comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ gameLoseWorld.\r\n
+comment2.params=message\ x\ y
+comment2.target=void\ showTextWithBigRedFont(java.lang.String,\ int,\ int)
+comment2.text=\r\n\ puts\ losing\ texte\ on\ screen\r\n
+numComments=3
