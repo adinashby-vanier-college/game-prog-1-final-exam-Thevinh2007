@@ -1,19 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class name="CannonBall" extends="Actor" enable="true" strideversion="1">
+<class name="CannonBall" extends="Actor" extends-java="Actor" enable="true" strideversion="1">
     <javadoc xml:space="preserve"/>
     <imports>
         <import target="java.util.*" enable="true"/>
         <import target="greenfoot.*" enable="true"/>
     </imports>
     <implements/>
-    <fields/>
-    <constructors/>
-    <methods>
-        <method access="public" type="void" name="act" enable="true">
-            <javadoc xml:space="preserve">Act - do whatever the CannonBall wants to do. This method is called whenever the 'Act' or 'Run' button gets pressed in the environment.</javadoc>
+    <fields>
+        <variable access="private" type="Point2D" type-java="Point2D" name="position" enable="true"/>
+        <variable access="private" type="Vector2D" type-java="Vector2D" name="velocity" enable="true"/>
+        <variable access="private" type="Vector2D" type-java="Vector2D" name="acceleration" enable="true"/>
+        <variable access="private" static="true" final="true" type="double" type-java="double" name="GRAVITY" value="9.8" value-java="9.8" enable="true"/>
+    </fields>
+    <constructors>
+        <constructor access="public" enable="true">
+            <javadoc xml:space="preserve">constructors</javadoc>
             <params/>
             <throws/>
-            <body/>
+            <body>
+                <assign dest="position" dest-java="position" src="null" src-java="null" enable="true"/>
+                <assign dest="velocity" dest-java="velocity" src="new Vector2D(0.0,0.0)" src-java=" new Vector2D(0.0, 0.0)" enable="true"/>
+                <assign dest="acceleration" dest-java="acceleration" src="new Vector2D(0.0,GRAVITY)" src-java=" new Vector2D(0.0, GRAVITY)" enable="true"/>
+            </body>
+        </constructor>
+    </constructors>
+    <methods>
+        <method access="public" type="void" type-java="void" name="act" enable="true">
+            <javadoc xml:space="preserve">main </javadoc>
+            <params/>
+            <throws/>
+            <body>
+                <call expression="updatePhysics()" expression-java="updatePhysics()" enable="true"/>
+                <call expression="touchLadyBug()" expression-java="touchLadyBug()" enable="true"/>
+                <if condition="isGameOver()" condition-java="isGameOver()" enable="true">
+                    <ifStatements>
+                        <call expression="transitionToGameOverWorld()" expression-java="transitionToGameOverWorld()" enable="true"/>
+                    </ifStatements>
+                </if>
+            </body>
+        </method>
+        <method access="public" type="boolean" type-java="boolean" name="isGameOver" enable="true">
+            <javadoc xml:space="preserve">if we lost or not</javadoc>
+            <params/>
+            <throws/>
+            <body>
+                <variable type="World" type-java="World" name="world" value="getWorld()" value-java="getWorld()" enable="true"/>
+                <if condition="world.getObjects(Ladybug.class).isEmpty()" condition-java="world.getObjects(Ladybug.class).isEmpty()" enable="true">
+                    <ifStatements>
+                        <return value="true" value-java="true" enable="true"/>
+                    </ifStatements>
+                    <else>
+                        <return value="false" value-java="false" enable="true"/>
+                    </else>
+                </if>
+            </body>
+        </method>
+        <method access="public" type="void" type-java="void" name="transitionToGameOverWorld" enable="true">
+            <javadoc xml:space="preserve">transition to losing screen</javadoc>
+            <params/>
+            <throws/>
+            <body>
+                <variable type="World" type-java="World" name="gameLoseWorld" value="new gameLoseWorld()" value-java=" new gameLoseWorld()" enable="true"/>
+                <call expression="Greenfoot.setWorld(gameLoseWorld)" expression-java="Greenfoot.setWorld(gameLoseWorld)" enable="true"/>
+                <call expression="Greenfoot.playSound(&quot;lose.wav&quot;)" expression-java="Greenfoot.playSound(&quot;lose.wav&quot;)" enable="true"/>
+            </body>
+        </method>
+        <method access="public" type="void" type-java="void" name="setVelocity" enable="true">
+            <javadoc xml:space="preserve">set velocity of ball</javadoc>
+            <params>
+                <params type="Vector2D" type-java="Vector2D" name="newValue"/>
+            </params>
+            <throws/>
+            <body>
+                <assign dest="velocity" dest-java="velocity" src="newValue" src-java="newValue" enable="true"/>
+            </body>
+        </method>
+        <method access="public" type="void" type-java="void" name="updatePhysics" enable="true">
+            <javadoc xml:space="preserve">vectors and angles for the ball</javadoc>
+            <params/>
+            <throws/>
+            <body>
+                <if condition="position==null" condition-java="position == null" enable="true">
+                    <ifStatements>
+                        <assign dest="position" dest-java="position" src="new Point2D(getX(),getY())" src-java=" new Point2D(getX(), getY())" enable="true"/>
+                    </ifStatements>
+                </if>
+                <comment xml:space="preserve">get time step duration</comment>
+                <variable type="MyWorld" type-java="MyWorld" name="world" value="(MyWorld)getWorld()" value-java="(MyWorld)getWorld()" enable="true"/>
+                <variable type="double" type-java="double" name="dt" value="world.getTimeStepDuration()" value-java="world.getTimeStepDuration()" enable="true"/>
+                <comment xml:space="preserve">update velocity</comment>
+                <variable type="Vector2D" type-java="Vector2D" name="velocityVariation" value="Vector2D.multiply(acceleration,dt)" value-java="Vector2D.multiply(acceleration, dt)" enable="true"/>
+                <assign dest="velocity" dest-java="velocity" src="Vector2D.add(velocity,velocityVariation)" src-java="Vector2D.add(velocity, velocityVariation)" enable="true"/>
+                <comment xml:space="preserve">update position</comment>
+                <variable type="Vector2D" type-java="Vector2D" name="positionVariation" value="Vector2D.multiply(acceleration,dt)" value-java="Vector2D.multiply(acceleration, dt)" enable="true"/>
+                <call expression="position.add(positionVariation)" expression-java="position.add(positionVariation)" enable="true"/>
+                <comment xml:space="preserve">set new position of actor</comment>
+                <call expression="setLocation((int)position.getX(),(int)position.getY())" expression-java="setLocation((int)position.getX(), (int)position.getY())" enable="true"/>
+            </body>
+        </method>
+        <method access="public" type="void" type-java="void" name="touchLadyBug" enable="true">
+            <javadoc xml:space="preserve">condition to lose</javadoc>
+            <params/>
+            <throws/>
+            <body>
+                <variable type="Actor" type-java="Actor" name="Ladybug" value="getOneIntersectingObject(Ladybug.class)" value-java="getOneIntersectingObject(Ladybug.class)" enable="true"/>
+                <if condition="Ladybug!=null" condition-java="Ladybug != null" enable="true">
+                    <ifStatements>
+                        <variable type="World" type-java="World" name="world" value="getWorld()" value-java="getWorld()" enable="true"/>
+                        <call expression="world.removeObject(Ladybug)" expression-java="world.removeObject(Ladybug)" enable="true"/>
+                        <call expression="Greenfoot.playSound(&quot;eating.wav&quot;)" expression-java="Greenfoot.playSound(&quot;eating.wav&quot;)" enable="true"/>
+                    </ifStatements>
+                </if>
+            </body>
         </method>
     </methods>
 </class>

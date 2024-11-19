@@ -1,19 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<class name="Canon" extends="Actor" enable="true" strideversion="1">
+<class name="Canon" extends="Actor" extends-java="Actor" enable="true" strideversion="1">
     <javadoc xml:space="preserve"/>
     <imports>
         <import target="java.util.*" enable="true"/>
         <import target="greenfoot.*" enable="true"/>
     </imports>
     <implements/>
-    <fields/>
+    <fields>
+        <variable access="private" final="true" type="double" type-java="double" name="CANNONBALLVELOCITY" value="9.8" value-java="9.8" enable="true"/>
+    </fields>
     <constructors/>
     <methods>
-        <method access="public" type="void" name="act" enable="true">
+        <method access="public" type="void" type-java="void" name="act" enable="true">
             <javadoc xml:space="preserve">Act - do whatever the Canon wants to do. This method is called whenever the 'Act' or 'Run' button gets pressed in the environment.</javadoc>
             <params/>
             <throws/>
-            <body/>
+            <body>
+                <call expression="shootRandom()" expression-java="shootRandom()" enable="true"/>
+            </body>
+        </method>
+        <method access="public" type="void" type-java="void" name="alignWithVector" enable="true">
+            <javadoc xml:space="preserve">align with the vector</javadoc>
+            <params>
+                <params type="Vector2D" type-java="Vector2D" name="v"/>
+            </params>
+            <throws/>
+            <body>
+                <variable type="double" type-java="double" name="adjacent" value="v.getX()" value-java="v.getX()" enable="true"/>
+                <variable type="double" type-java="double" name="opposite" value="v.getY()" value-java="v.getY()" enable="true"/>
+                <blank/>
+                <variable type="double" type-java="double" name="angleRadians" value="Math.atan2(opposite,adjacent)" value-java="Math.atan2(opposite, adjacent)" enable="true"/>
+                <variable type="double" type-java="double" name="angleDegrees" value="Math.toDegrees(angleRadians)" value-java="Math.toDegrees(angleRadians)" enable="true"/>
+                <blank/>
+                <call expression="setRotation((int)angleDegrees)" expression-java="setRotation((int)angleDegrees)" enable="true"/>
+            </body>
+        </method>
+        <method access="public" type="void" type-java="void" name="shootRandom" enable="true">
+            <javadoc xml:space="preserve">shoot cannons randomly</javadoc>
+            <params/>
+            <throws/>
+            <body>
+                <variable type="int" type-java="int" name="n" value="Greenfoot.getRandomNumber(100)" value-java="Greenfoot.getRandomNumber(100)" enable="true"/>
+                <if condition="n==1||n==5" condition-java="n == 1 || n == 5" enable="true">
+                    <ifStatements>
+                        <variable type="CannonBall" type-java="CannonBall" name="newBall" value="new CannonBall()" value-java=" new CannonBall()" enable="true"/>
+                        <call expression="getWorld().addObject(newBall,getX(),getY())" expression-java="getWorld().addObject(newBall, getX(), getY())" enable="true"/>
+                    </ifStatements>
+                </if>
+            </body>
         </method>
     </methods>
 </class>
